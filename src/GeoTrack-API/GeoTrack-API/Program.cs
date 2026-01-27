@@ -1,3 +1,5 @@
+using Scalar.AspNetCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,6 +14,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+
+    // Scalar UI for the OpenAPI document
+    // Default route: /scalar/v1 (Scalar will read from the mapped OpenAPI endpoint)
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
