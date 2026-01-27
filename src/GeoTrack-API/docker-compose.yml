@@ -1,0 +1,6 @@
+services:
+  geotrack-api:
+    image: ${DOCKER_REGISTRY-}geotrackapi
+    build:
+      context: .
+      dockerfile: GeoTrack-API/Dockerfile
