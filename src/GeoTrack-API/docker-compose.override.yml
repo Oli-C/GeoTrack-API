@@ -1,14 +1,15 @@
 services:
   geotrack-api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      # Remove HTTPS to stop Kestrel requiring a cert
+      # ASPNETCORE_HTTPS_PORTS: "8081"
     ports:
-      - "8080"
-      - "8081"
+      - "8080:8080"
+    # Remove HTTPS cert mounts
     volumes:
-      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
-      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
-      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+      - ${HOME}/.microsoft/usersecrets:/home/app/.microsoft/usersecrets:ro
+      - ${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets:ro
+      # - ${HOME}/.aspnet/https:/home/app/.aspnet/https:ro
+      # - ${HOME}/.aspnet/https:/root/.aspnet/https:ro

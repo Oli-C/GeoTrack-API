@@ -2,5 +2,6 @@
   <Project Path="docker-compose.dcproj">
     <Build />
   </Project>
+  <Project Path="GeoTrack-API.Specs/GeoTrack-API.Specs.csproj" />
   <Project Path="GeoTrack-API/GeoTrack-API.csproj" />
 </Solution>
