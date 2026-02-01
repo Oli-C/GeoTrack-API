@@ -3,6 +3,7 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_HTTP_PORTS: "8080"
+      ConnectionStrings__Postgres: "Host=postgres;Port=5432;Database=geotrack;Username=postgres;Password=postgres"
       # Remove HTTPS to stop Kestrel requiring a cert
       # ASPNETCORE_HTTPS_PORTS: "8081"
     ports:

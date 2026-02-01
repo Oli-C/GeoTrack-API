@@ -13,4 +13,8 @@
     <None Include=".dockerignore" />
     <None Include="NuGet.Config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="README.md" />
+    <Content Include="seed-tenants-and-york-demo.sh" />
+  </ItemGroup>
 </Project>

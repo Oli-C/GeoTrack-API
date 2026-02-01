@@ -1,4 +1,4 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=3d43d072_002D49d9_002D4dda_002D9482_002D15b9713686f0/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;GeoTrack-API.Specs&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
-  &lt;Project Location="/Users/oliverclarke/Git/GeoTrack-API/src/GeoTrack-API/GeoTrack-API.Specs" Presentation="&amp;lt;GeoTrack-API.Specs&amp;gt;" /&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=89b759f4_002D6451_002D4ce7_002Db276_002Dc8df2d2636a2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;GeoTrack.API.Specs&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Project Location="/Users/oliverclarke/Git/GeoTrack-API/src/GeoTrack-API/GeoTrack.API.Specs" Presentation="&amp;lt;GeoTrack.API.Specs&amp;gt;" /&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
