@@ -56,7 +56,9 @@ That script:
 - ingests a small set of fixes via `POST /vehicles/{vehicleId}/gps-fixes`
 
 4. **Once finished, stop and clean up everything:**
-> docker compose down -v
+```sh
+docker compose down -v
+```
 
 ## Run locally (dotnet)
 
