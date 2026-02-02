@@ -55,6 +55,9 @@ That script:
 - creates a demo vehicle via `POST /vehicles`
 - ingests a small set of fixes via `POST /vehicles/{vehicleId}/gps-fixes`
 
+4. **Once finished, stop and clean up everything:**
+> docker compose down -v
+
 ## Run locally (dotnet)
 
 ### Prerequisites
