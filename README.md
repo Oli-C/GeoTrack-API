@@ -1,22 +1,20 @@
 # GeoTrack API
-
-Multi-tenant REST API for ingesting GPS telemetry (“fixes”) for vehicles and querying vehicle state (identity, status, latest location).
+> Multi-tenant REST API for ingesting GPS telemetry (“fixes”) for vehicles and querying vehicle state.
 
 - API project: `GeoTrack.API/`
 - Domain model: `GeoTrack.Domain/`
-- BDD/integration-style specs: `GeoTrack.API.Specs/` (Reqnroll + xUnit)
+- BDD Tests: `GeoTrack.API.Specs/` (Reqnroll + xUnit)
 
 ## Key concepts
 
 ### Multi-tenancy
-Most endpoints are **tenant-scoped**.
+Endpoints are **tenant-scoped**.
 
 - Send tenant ID using header: `X-Tenant-Id: <guid>`
 - The API validates the tenant header:
   - It must be a valid GUID and not empty.
-  - The tenant must exist in the `tenants` table.
-
-Endpoints that require a tenant will return **400** if the tenant header is missing.
+  - The tenant must exist in the `tenants` table. 
+  - Will return **400** if the tenant header is missing.
 
 ### API key authentication
 By default, the API requires an API key header on most endpoints.
@@ -30,9 +28,7 @@ Configuration is under `ApiKey` in `appsettings.json`.
 
 ## Quick start (Docker Compose)
 This repo includes Docker Compose for Postgres + the API.
-
-What you get:
-- Postgres 16 exposed on `localhost:5432`
+- Postgres exposed on `localhost:5432`
 - API exposed on `http://localhost:8080`
 - EF Core migrations run automatically on API startup
 
@@ -67,27 +63,14 @@ That script:
 
 ### Configuration
 The API reads the Postgres connection string from:
-- `ConnectionStrings:Postgres` in `GeoTrack.API/appsettings.json`, or
-- env var `ConnectionStrings__Postgres`
-
+- `ConnectionStrings:Postgres` in `GeoTrack.API/appsettings.json`
 Default (local dev) connection string is:
 
 ```text
 Host=localhost;Port=5432;Database=geotrack;Username=postgres;Password=postgres
 ```
 
-### Run the API
-From the repository root (`GeoTrack-API/`):
-
-```sh
-dotnet run --project GeoTrack.API/GeoTrack.API.csproj
-```
-
-Notes:
-- In Development, OpenAPI is available at `/openapi/*` and the Scalar UI at `/scalar/v1`.
-- The app runs EF Core migrations on startup (with a short retry loop) unless `ASPNETCORE_ENVIRONMENT=Testing`.
-
-## API documentation (OpenAPI + Scalar)
+## API documentation (Scalar)
 In **Development**:
 - OpenAPI JSON: `GET /openapi/v1.json`
 - Scalar UI: `GET /scalar/v1`
@@ -101,7 +84,7 @@ These docs are mapped *before* the API key middleware runs, so they don’t requ
 | `X-Api-Key` | Yes (most endpoints) | API key. Default dev key is `dev-local-key`. |
 | `X-Tenant-Id` | Yes (tenant-scoped endpoints) | Tenant GUID. Must exist in the database. |
 
-## Endpoints (overview)
+## Endpoints
 
 ### Health
 - `GET /health` (anonymous by default)
@@ -170,27 +153,14 @@ curl -sS "http://localhost:8080/vehicles/${VEHICLE_ID}/latest-location" \
 - EF Core migrations live in `GeoTrack.API/Migrations/`.
 - On startup (except in the `Testing` environment), the API runs `db.Database.MigrateAsync()` with retries.
 
-Typical development workflow:
-- Start Postgres.
-- Run the API.
-- Let it apply migrations automatically.
-
-If you need to generate new migrations, use the EF Core tooling from the API project (example):
-
-```sh
-dotnet tool restore
-# then (if dotnet-ef is available in your environment)
-# dotnet ef migrations add <Name> --project GeoTrack.API/GeoTrack.API.csproj
-```
-
 ## Testing
 
 ### Specs project
 `GeoTrack.API.Specs` is a test project using:
 - Reqnroll (Gherkin-style BDD)
 - xUnit
-- `Microsoft.AspNetCore.Mvc.Testing`
 - EF Core InMemory provider
+- `Microsoft.AspNetCore.Mvc.Testing`
 
 The specs start the API in the `Testing` environment and replace the DB context with InMemory (`GeoTrack.API.Specs/Infrastructure/GeoTrackApiFactory.cs`).
 
@@ -199,6 +169,8 @@ Run tests:
 ```sh
 dotnet test
 ```
+
+> This approach is intentionally used for logic and API behavior validation, not for validating PostgreSQL-specific or relational database behavior. EF Core’s InMemory provider does not enforce constraints, transactions, indexes, or SQL translation rules in the same way as a real relational database.
 
 ## Troubleshooting
 
@@ -218,5 +190,37 @@ If the API fails on startup with a missing connection string or migration failur
 
 ---
 
-### License
-If you want, add a license section/file for your intended usage.
+Data Retention, Analytics & Data Protection
+-------------------------------------------
+
+GPS telemetry is high-volume time-series data. Moving forward, the system should consider supporting **long-term analytics**, and **data-protection best practices** through a tiered retention strategy.
+
+### Short-Term
+
+Full-fidelity GPS fixes are stored in PostgreSQL for a limited window (e.g. **7–30 days**). This supports:
+
+*   Real-time vehicle tracking.
+
+*   Route and shift monitoring.
+
+*   Incident investigation and support.
+
+### Long-Term (Analytics & Reporting)
+
+Rather than deleting historical data entirely, older telemetry could be downsampled into lower-resolution location traces (for example, one point per minute) and rolled up into summary metrics such as:
+
+- Distance travelled.
+- Time spent on route. 
+- Average speed and collection speed.
+- Route adherence.
+- Idle times.
+- Stop durations.
+- Automated stop verifcation.
+- Productivity metrics.
+
+
+These roll-ups could be stored in dedicated DB tables or exported to cheaper long-term storage or even blob storage.
+
+This allows customers to analyse trends across weeks and months, without us keeping high-volume location data in the operational database.
+
+*Oli Clarke - 2026.02.02*
